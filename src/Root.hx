@@ -8,6 +8,7 @@ class Root extends Sprite {
 
     public static var assets:AssetManager;
     public var ninja:Image;
+    public var Circle_placeholder:Image;
 
     public function new() {
         super();
@@ -17,6 +18,7 @@ class Root extends Sprite {
 
         assets = new AssetManager();
         assets.enqueue("assets/ninja.png");
+        assets.enqueue("assets/Circle_placeholder.png");
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
@@ -31,6 +33,11 @@ class Root extends Sprite {
                         ninja.x = 100;
                         ninja.y = 0;
                         addChild(ninja);
+
+                        Circle_placeholder = new Image(Root.assets.getTexture("Circle_placeholder"));
+                        Circle_placeholder.x = 250;
+                        Circle_placeholder.y = 250;
+                        addChild(Circle_placeholder);
 
                         Starling.juggler.tween(ninja, 1.0, {
                             transition: Transitions.EASE_OUT_BOUNCE,
