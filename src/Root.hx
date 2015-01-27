@@ -11,6 +11,8 @@ import starling.events.TouchPhase;
 import starling.events.KeyboardEvent;
 import flash.ui.Keyboard;
 
+import starling.events.Event;
+
 class Root extends Sprite {
 
     public static var assets:AssetManager;
@@ -18,6 +20,9 @@ class Root extends Sprite {
     public var Circle_placeholder:Image;
     public var Paddle:Image;
     public var dart:Image;
+    public var currentTime:Float;
+    public var previousTime:Float;
+    public var timer = haxe.Timer;
 
     public function new() {
         super();
@@ -61,21 +66,7 @@ class Root extends Sprite {
                         Paddle.y = 325;
                         addChild(Paddle);
 
-                        dart = new Image(Root.assets.getTexture("dart"));
-                        dart.alignPivot();
-                        dart.rotation = deg2rad(215);
-                        dart.x = 50;
-                        dart.y = 50;
-                        addChild(dart);
-
-
-                Starling.juggler.tween(dart, 1, {
-                        transition: Transitions.LINEAR,
-                        y: 500,
-                        x: 500
-                });
-
-
+                        previousTime = timer.stamp();
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
                                 if (event.keyCode == Keyboard.LEFT) {
@@ -138,6 +129,38 @@ class Root extends Sprite {
 
                         );
 
+                    Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
+                        currentTime = timer.stamp();
+                        if(currentTime-previousTime > 1){  //if enough time has passed between darts, will spawn a new dart
+                            dart = new Image(Root.assets.getTexture("dart"));
+                            var startingWall = Math.random(); //determines if which wall the dart shows up at
+                            if(startingWall < .25){  //spawns dart on left wall
+                                dart.x = 0;
+                                dart.y = Math.random() * 650;
+                            }
+                            else if(startingWall < .50){ //spawns dart on right wall
+                                dart.x = 650;
+                                dart.y = Math.random() * 650;
+                            }
+                            else if (startingWall < .75){ //spawns dart on top wall
+                                dart.x = Math.random() * 650;
+                                dart.y = 0;
+                            }
+                            else{
+                                dart.x = Math.random() * 650; //spawns dart on bottom wall
+                                dart.y = 650;
+                            }
+                            addChild(dart);
+                            previousTime = currentTime;
+
+                            Starling.juggler.tween(dart, 1, {
+                                transition: Transitions.LINEAR,
+                                y: 325,
+                                x: 325
+                            });
+
+                        }
+                        });
                     }
                 });
             }
