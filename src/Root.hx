@@ -150,6 +150,7 @@ class Root extends Sprite {
                                 dart.x = Math.random() * 650; //spawns dart on bottom wall
                                 dart.y = 650;
                             }
+                            dart.pivotY = dart.width / 2;
                             addChild(dart);
                             previousTime = currentTime;
 
