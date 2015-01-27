@@ -1,6 +1,8 @@
 import starling.display.Sprite;
 import starling.utils.AssetManager;
+
 import starling.display.Image;
+import starling.display.DisplayObject;
 import starling.core.Starling;
 import starling.animation.Transitions;
 
@@ -18,6 +20,10 @@ class Root extends Sprite {
 
     public function new() {
         super();
+    }
+
+    public static function deg2rad(deg:Int){
+        return deg / 180.0 * Math.PI;
     }
 
     public function start(startup:Startup) {
@@ -47,42 +53,59 @@ class Root extends Sprite {
                         addChild(Circle_placeholder);
 
                         Paddle = new Image(Root.assets.getTexture("Paddle"));
-                        Paddle.x = 200;
-                        Paddle.y = 200;
+                        Paddle.alignPivot();
+                        Paddle.rotation = deg2rad(0);
+                        Paddle.x = 325;
+                        Paddle.y = 325;
                         addChild(Paddle);
 
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
                                 if (event.keyCode == Keyboard.LEFT) {
-                                    var position = Paddle.x - 1;
+                                    var position = Paddle.rotation - deg2rad(6);
                                     Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
-                                        x: position
+                                        rotation: position
                                         });
                                 }
                                 if (event.keyCode == Keyboard.RIGHT) {
-                                    var position = Paddle.x + 1;
+                                    var position = Paddle.rotation + deg2rad(6);
                                     Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
-                                        x: position
-                                        });                                }
-                                if (event.keyCode == Keyboard.DOWN) {
-                                    var position = Paddle.y + 1;
-                                    Starling.juggler.tween(Paddle, 0.06, {
-                                        transition: Transitions.LINEAR,
-                                        y: position
-                                        });    
+                                        rotation: position
+                                        });
                                 }
-                                if (event.keyCode == Keyboard.UP) {
-                                    var position = Paddle.y - 1;
-                                    Starling.juggler.tween(Paddle, 0.06, {
-                                        transition: Transitions.LINEAR,
-                                        y: position
-                                        });  
-                                }
+                                // if (event.keyCode == Keyboard.LEFT) {
+                                //     var position = Paddle.x - 1;
+                                //     Starling.juggler.tween(Paddle, 0.06, {
+                                //         transition: Transitions.LINEAR,
+                                //         x: position
+                                //         });   
+                                // }  
+                                // if (event.keyCode == Keyboard.RIGHT) {
+                                //     var position = Paddle.x + 1;
+                                //     Starling.juggler.tween(Paddle, 0.06, {
+                                //         transition: Transitions.LINEAR,
+                                //         x: position
+                                //         });  
+                                // }
+                                // if (event.keyCode == Keyboard.DOWN) {
+                                //     var position = Paddle.y + 1;
+                                //     Starling.juggler.tween(Paddle, 0.06, {
+                                //         transition: Transitions.LINEAR,
+                                //         y: position
+                                //         });    
+                                // }
+                                // if (event.keyCode == Keyboard.UP) {
+                                //     var position = Paddle.y - 1;
+                                //     Starling.juggler.tween(Paddle, 0.06, {
+                                //         transition: Transitions.LINEAR,
+                                //         y: position
+                                //         });  
+                                // }
                                 // trace(Paddle.x);
                                 // trace(Paddle.y);
-                                });
+                            }
 
                         // ninja.addEventListener(TouchEvent.TOUCH,
                         //     function(e:TouchEvent) {
@@ -96,10 +119,12 @@ class Root extends Sprite {
                         //         y: 250
                         //         });
 
-                    }
+                        );
 
-                });
-            }
+                    }
+                    }
+                    );
+                }
 
         });
     }
