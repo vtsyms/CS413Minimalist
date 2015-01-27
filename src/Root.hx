@@ -122,9 +122,8 @@ class Root extends Sprite {
                         );
 
                     }
-                    }
-                    );
-                }
+                });
+            }
 
         });
     }
