@@ -137,6 +137,7 @@ class Root extends Sprite {
                             if(startingWall < .25){  //spawns dart on left wall
                                 dart.x = 0;
                                 dart.y = Math.random() * 650;
+                                dart.rotation = deg2rad(180);
                             }
                             else if(startingWall < .50){ //spawns dart on right wall
                                 dart.x = 650;
@@ -145,10 +146,12 @@ class Root extends Sprite {
                             else if (startingWall < .75){ //spawns dart on top wall
                                 dart.x = Math.random() * 650;
                                 dart.y = 0;
+                                dart.rotation = deg2rad(-90);
                             }
                             else{
                                 dart.x = Math.random() * 650; //spawns dart on bottom wall
                                 dart.y = 650;
+                                dart.rotation = deg2rad(90);
                             }
                             dart.pivotY = dart.width / 2;
                             addChild(dart);
