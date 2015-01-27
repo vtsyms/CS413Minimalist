@@ -17,6 +17,7 @@ class Root extends Sprite {
     public var ninja:Image;
     public var Circle_placeholder:Image;
     public var Paddle:Image;
+    public var dart:Image;
 
     public function new() {
         super();
@@ -32,6 +33,7 @@ class Root extends Sprite {
         assets.enqueue("assets/ninja.png");
         assets.enqueue("assets/Circle_placeholder.png");
         assets.enqueue("assets/Paddle.png");
+        assets.enqueue("assets/dart.png");
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
@@ -58,6 +60,21 @@ class Root extends Sprite {
                         Paddle.x = 325;
                         Paddle.y = 325;
                         addChild(Paddle);
+
+                        dart = new Image(Root.assets.getTexture("dart"));
+                        dart.alignPivot();
+                        dart.rotation = deg2rad(215);
+                        dart.x = 50;
+                        dart.y = 50;
+                        addChild(dart);
+
+
+                Starling.juggler.tween(dart, 1, {
+                        transition: Transitions.LINEAR,
+                        y: 500,
+                        x: 500
+                });
+
 
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
