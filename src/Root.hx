@@ -19,6 +19,7 @@ import starling.utils.VAlign;
 class Root extends Sprite {
 
     public static var assets:AssetManager;
+    public var background:Image;
     public var ninja:Image;
     public var Circle_placeholder:Image;
     public var Paddle:Image;
@@ -91,6 +92,7 @@ class Root extends Sprite {
     public function start(startup:Startup) {
 
         assets = new AssetManager();
+        assets.enqueue("assets/Background.png");
         assets.enqueue("assets/ninja.png");
         assets.enqueue("assets/Circle_placeholder.png");
         assets.enqueue("assets/Paddle.png");
@@ -110,6 +112,11 @@ class Root extends Sprite {
                         // ninja.x = 100;
                         // ninja.y = 0;
                         // addChild(ninja);
+
+                        background = new Image(Root.assets.getTexture("Background"));
+                        background.x = 0;
+                        background.y = 0;
+                        addChild(background);
 
                         Circle_placeholder = new Image(Root.assets.getTexture("Circle_placeholder"));
                         Circle_placeholder.x = 250;
