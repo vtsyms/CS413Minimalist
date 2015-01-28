@@ -12,7 +12,6 @@ import starling.events.KeyboardEvent;
 import flash.ui.Keyboard;
 
 import starling.events.Event;
-import starling.text.TextField;
 
 class Root extends Sprite {
 
@@ -21,11 +20,10 @@ class Root extends Sprite {
     public var Circle_placeholder:Image;
     public var Paddle:Image;
     public var dart:Image;
-    public var startTime:Float; //used for scoring system
-    public var currentTime:Float; 
-    public var previousTime:Float; //used for dart spawning intervals
+    public var currentTime:Float;
+    public var previousTime:Float;
     public var timer = haxe.Timer;
-    public var scoreField:TextField; 
+
     public function new() {
         super();
     }
@@ -67,10 +65,6 @@ class Root extends Sprite {
                         Paddle.x = 325;
                         Paddle.y = 325;
                         addChild(Paddle);
-
-                        scoreField = new TextField(100, 100, "Score: 0");
-                        addChild(scoreField);
-
 
                         previousTime = timer.stamp();
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
@@ -134,11 +128,9 @@ class Root extends Sprite {
                         //         });
 
                         );
-                    startTime = timer.stamp();
+
                     Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
                         currentTime = timer.stamp();
-                        var score = Std.int((currentTime-startTime)*100);
-                        scoreField.text = "Score: " + score;
                         if(currentTime-previousTime > 1){  //if enough time has passed between darts, will spawn a new dart
                             dart = new Image(Root.assets.getTexture("dart"));
                             var startingWall = Math.random(); //determines if which wall the dart shows up at
