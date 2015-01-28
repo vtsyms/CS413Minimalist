@@ -12,6 +12,7 @@ import starling.events.KeyboardEvent;
 import flash.ui.Keyboard;
 
 import starling.events.Event;
+import starling.text.TextField;
 
 class Root extends Sprite {
 
@@ -20,9 +21,11 @@ class Root extends Sprite {
     public var Circle_placeholder:Image;
     public var Paddle:Image;
     public var dart:Image;
-    public var currentTime:Float;
-    public var previousTime:Float;
+    public var startTime:Float; //used for scoring system
+    public var currentTime:Float; //stores current time
+    public var previousTime:Float; //used for dart creation
     public var timer = haxe.Timer;
+    public var scoreField:TextField; 
 
     public function new() {
         super();
@@ -30,6 +33,56 @@ class Root extends Sprite {
 
     public static function deg2rad(deg:Int){
         return deg / 180.0 * Math.PI;
+    }
+
+    public function findAng(posx:Float, posy:Float){
+        if (posy == 0 && posx != 0) {
+            if (posx > 325){
+                return -1.0 * Math.atan(325.0/(posx-325.0));       
+            }
+            else if (posx < 325){
+                return deg2rad(-180) + (1.0 * Math.atan(325.0/(325.0-posx)));
+            }
+            else {
+                return 1.0 * deg2rad(-90);
+            }
+        }
+        else if (posy == 650 && posx != 0) {
+            if (posx > 325){
+                return (1.0 * Math.atan(325.0/(posx-325.0)));
+            }
+            else if (posx < 325){
+                return deg2rad(180) - (1.0 * Math.atan(325.0/(325.0-posx)));
+            }
+            else {
+                return 1.0 * deg2rad(90);
+            }
+        }
+        else if (posy != 0 && posx == 0) {
+            if (posy > 325){
+                return deg2rad(90) + (1.0 * Math.atan(325.0/(posy - 325.0)));
+            }
+            else if (posy < 325){
+                return deg2rad(-90) - (1.0 * Math.atan(325.0/(325.0-posy)));          
+            }
+            else {
+                return deg2rad(180);
+            }
+        }
+        else if (posy != 0 && posx == 650) {
+            if (posy > 325){
+                return deg2rad(90) - (1.0 * Math.atan(325.0/(posy - 325.0)));      
+            }
+            else if (posy < 325){
+                return deg2rad(-90) + (1.0 * Math.atan(325.0/(325.0-posy)));      
+            }
+            else {
+                return deg2rad(0);
+            }
+        }
+        else {
+            return 0;
+        }
     }
 
     public function start(startup:Startup) {
@@ -65,6 +118,9 @@ class Root extends Sprite {
                         Paddle.x = 325;
                         Paddle.y = 325;
                         addChild(Paddle);
+
+                        scoreField = new TextField(100, 100, "Score: 0");
+                        addChild(scoreField);
 
                         previousTime = timer.stamp();
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
@@ -128,16 +184,17 @@ class Root extends Sprite {
                         //         });
 
                         );
-
+					startTime = timer.stamp();
                     Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
                         currentTime = timer.stamp();
+                        var score = Std.int((currentTime-startTime)*100);
+                        scoreField.text = "Score: " + score;
                         if(currentTime-previousTime > 1){  //if enough time has passed between darts, will spawn a new dart
                             dart = new Image(Root.assets.getTexture("dart"));
                             var startingWall = Math.random(); //determines if which wall the dart shows up at
                             if(startingWall < .25){  //spawns dart on left wall
                                 dart.x = 0;
                                 dart.y = Math.random() * 650;
-                                dart.rotation = deg2rad(180);
                             }
                             else if(startingWall < .50){ //spawns dart on right wall
                                 dart.x = 650;
@@ -146,14 +203,13 @@ class Root extends Sprite {
                             else if (startingWall < .75){ //spawns dart on top wall
                                 dart.x = Math.random() * 650;
                                 dart.y = 0;
-                                dart.rotation = deg2rad(-90);
                             }
                             else{
                                 dart.x = Math.random() * 650; //spawns dart on bottom wall
                                 dart.y = 650;
-                                dart.rotation = deg2rad(90);
                             }
                             dart.pivotY = dart.width / 2;
+                            dart.rotation = findAng(dart.x, dart.y);
                             addChild(dart);
                             previousTime = currentTime;
 
