@@ -21,6 +21,7 @@ class Root extends Sprite {
     public var Circle_placeholder:Image;
     public var Paddle:Image;
     public var dart:Image;
+    public var target:Image;
     public var startTime:Float; //used for scoring system
     public var currentTime:Float; //stores current time
     public var previousTime:Float; //used for dart creation
@@ -92,6 +93,7 @@ class Root extends Sprite {
         assets.enqueue("assets/Circle_placeholder.png");
         assets.enqueue("assets/Paddle.png");
         assets.enqueue("assets/dart.png");
+        assets.enqueue("assets/target.png");
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
@@ -112,6 +114,11 @@ class Root extends Sprite {
                         Circle_placeholder.y = 250;
                         addChild(Circle_placeholder);
 
+                        target = new Image(Root.assets.getTexture("target"));
+                        target.x = 275;
+                        target.y = 275;
+                        addChild(target);
+
                         Paddle = new Image(Root.assets.getTexture("Paddle"));
                         Paddle.alignPivot();
                         Paddle.rotation = deg2rad(0);
@@ -126,14 +133,14 @@ class Root extends Sprite {
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
                                 if (event.keyCode == Keyboard.LEFT) {
-                                    var position = Paddle.rotation - deg2rad(6);
+                                    var position = Paddle.rotation - deg2rad(20);
                                     Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
                                         rotation: position
                                         });
                                 }
                                 if (event.keyCode == Keyboard.RIGHT) {
-                                    var position = Paddle.rotation + deg2rad(6);
+                                    var position = Paddle.rotation + deg2rad(20);
                                     Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
                                         rotation: position
@@ -213,7 +220,8 @@ class Root extends Sprite {
                             addChild(dart);
                             previousTime = currentTime;
 
-                            Starling.juggler.tween(dart, 1, {
+                            Starling.juggler.tween(dart, 2, {
+                                delay: 1.0,
                                 transition: Transitions.LINEAR,
                                 y: 325,
                                 x: 325
