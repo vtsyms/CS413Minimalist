@@ -13,6 +13,8 @@ import flash.ui.Keyboard;
 
 import starling.events.Event;
 import starling.text.TextField;
+import starling.utils.HAlign;
+import starling.utils.VAlign;
 
 class Root extends Sprite {
 
@@ -127,6 +129,8 @@ class Root extends Sprite {
                         addChild(Paddle);
 
                         scoreField = new TextField(100, 100, "Score: 0");
+                        scoreField.hAlign = HAlign.LEFT;
+                        scoreField.vAlign = VAlign.TOP;
                         addChild(scoreField);
 
                         previousTime = timer.stamp();
