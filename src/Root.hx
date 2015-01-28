@@ -35,6 +35,56 @@ class Root extends Sprite {
         return deg / 180.0 * Math.PI;
     }
 
+    public function findAng(posx:Float, posy:Float){
+        if (posy == 0 && posx != 0) {
+            if (posx > 325){
+                return -1.0 * Math.atan(325.0/(posx-325.0));       
+            }
+            else if (posx < 325){
+                return deg2rad(-180) + (1.0 * Math.atan(325.0/(325.0-posx)));
+            }
+            else {
+                return 1.0 * deg2rad(-90);
+            }
+        }
+        else if (posy == 650 && posx != 0) {
+            if (posx > 325){
+                return (1.0 * Math.atan(325.0/(posx-325.0)));
+            }
+            else if (posx < 325){
+                return deg2rad(180) - (1.0 * Math.atan(325.0/(325.0-posx)));
+            }
+            else {
+                return 1.0 * deg2rad(90);
+            }
+        }
+        else if (posy != 0 && posx == 0) {
+            if (posy > 325){
+                return deg2rad(90) + (1.0 * Math.atan(325.0/(posy - 325.0)));
+            }
+            else if (posy < 325){
+                return deg2rad(-90) - (1.0 * Math.atan(325.0/(325.0-posy)));          
+            }
+            else {
+                return deg2rad(180);
+            }
+        }
+        else if (posy != 0 && posx == 650) {
+            if (posy > 325){
+                return deg2rad(90) - (1.0 * Math.atan(325.0/(posy - 325.0)));      
+            }
+            else if (posy < 325){
+                return deg2rad(-90) + (1.0 * Math.atan(325.0/(325.0-posy)));      
+            }
+            else {
+                return deg2rad(0);
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+
     public function start(startup:Startup) {
 
         assets = new AssetManager();
@@ -145,7 +195,6 @@ class Root extends Sprite {
                             if(startingWall < .25){  //spawns dart on left wall
                                 dart.x = 0;
                                 dart.y = Math.random() * 650;
-                                dart.rotation = deg2rad(180);
                             }
                             else if(startingWall < .50){ //spawns dart on right wall
                                 dart.x = 650;
@@ -154,14 +203,13 @@ class Root extends Sprite {
                             else if (startingWall < .75){ //spawns dart on top wall
                                 dart.x = Math.random() * 650;
                                 dart.y = 0;
-                                dart.rotation = deg2rad(-90);
                             }
                             else{
                                 dart.x = Math.random() * 650; //spawns dart on bottom wall
                                 dart.y = 650;
-                                dart.rotation = deg2rad(90);
                             }
                             dart.pivotY = dart.width / 2;
+                            dart.rotation = findAng(dart.x, dart.y);
                             addChild(dart);
                             previousTime = currentTime;
 
