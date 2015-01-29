@@ -220,7 +220,7 @@ class Root extends Sprite {
                         currentTime = timer.stamp();
                         var score = Std.int((currentTime-startTime)*100);
                         scoreField.text = "Score: " + score;
-                        if(currentTime-previousTime > 1){  //if enough time has passed between darts, will spawn a new dart
+                        if(currentTime-previousTime > 2){  //if enough time has passed between darts, will spawn a new dart
                             dart = new Image(Root.assets.getTexture("dart"));
                             var startingWall = Math.random(); //determines if which wall the dart shows up at
                             if(startingWall < .25){  //spawns dart on left wall
