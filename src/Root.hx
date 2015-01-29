@@ -95,7 +95,7 @@ class Root extends Sprite {
         assets.enqueue("assets/Background.png");
         assets.enqueue("assets/ninja.png");
         assets.enqueue("assets/Circle_placeholder.png");
-        assets.enqueue("assets/Paddle.png");
+        assets.enqueue("assets/paddle2.png");
         assets.enqueue("assets/dart.png");
         assets.enqueue("assets/target.png");
         assets.loadQueue(function onProgress(ratio:Float) {
@@ -128,11 +128,11 @@ class Root extends Sprite {
                         target.y = 275;
                         addChild(target);
 
-                        Paddle = new Image(Root.assets.getTexture("Paddle"));
+                        Paddle = new Image(Root.assets.getTexture("paddle2"));
                         Paddle.alignPivot();
                         Paddle.rotation = deg2rad(0);
                         Paddle.x = 325;
-                        Paddle.y = 325;
+                        Paddle.y = 255;
                         addChild(Paddle);
 
                         scoreField = new TextField(100, 100, "Score: 0");
@@ -145,6 +145,7 @@ class Root extends Sprite {
                             function(event:KeyboardEvent) {
                                 if (event.keyCode == Keyboard.LEFT) {
                                     var position = Paddle.rotation - deg2rad(20);
+                                    trace(Paddle.x);
                                     Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
                                         rotation: position
