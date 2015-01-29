@@ -229,8 +229,10 @@ class Root extends Sprite {
 	                            gameover = new Image(Root.assets.getTexture("gameover"));
 	                            gameover.x = 0;
 	                            gameover.y = 0;
+	                            removeChildren();
 	                            addChild(gameover);
-	                            removeChild(dart);
+	                            Starling.current.stage.removeEventListeners(Event.ENTER_FRAME);
+	                            Starling.current.stage.removeEventListeners(KeyboardEvent.KEY_DOWN);
 	                        }
 	                    }
                     }); 
