@@ -25,6 +25,7 @@ class Root extends Sprite {
     public var paddle:Image;
     public var dart:Image;
     public var target:Image;
+    public var middle:Image;
     public var gameover:Image;
     public var startTime:Float; //used for scoring system
     public var currentTime:Float; //stores current time
@@ -101,6 +102,7 @@ class Root extends Sprite {
         assets.enqueue("assets/dart.png");
         assets.enqueue("assets/target.png");
         assets.enqueue("assets/gameover.png");
+        assets.enqueue("assets/middle.png");
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
@@ -121,6 +123,11 @@ class Root extends Sprite {
                         target.x = 275;
                         target.y = 275;
                         addChild(target);
+
+                        middle = new Image(Root.assets.getTexture("middle"));
+                        middle.x = 325;
+                        middle.y = 325;
+                        addChild(middle);
 
                         paddle = new Image(Root.assets.getTexture("paddle"));
                         paddle.alignPivot();
@@ -208,20 +215,13 @@ class Root extends Sprite {
                            
                         }
 
-                        else if(currentTime-previousTime < 3){
-                        
-                        }
-
-                        else{
-                            removeChild(dart);
-                            dart.removeEventListeners(Event.ENTER_FRAME);
-                        }
+                      
 
                     Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
                     	if (dart != null){
 	                        var bounds1 = dart.bounds;
 	                        var bounds2 = paddle.bounds;
-	                        var bounds3 = target.bounds;
+	                        var bounds3 = middle.bounds;
 	                        if(bounds1.intersects(bounds2)){
 	                            removeChild(dart);
 	                        }
@@ -231,6 +231,7 @@ class Root extends Sprite {
 	                            gameover.y = 0;
 	                            removeChildren();
 	                            addChild(gameover);
+	                            addChild(scoreField);
 	                            Starling.current.stage.removeEventListeners(Event.ENTER_FRAME);
 	                            Starling.current.stage.removeEventListeners(KeyboardEvent.KEY_DOWN);
 	                        }
