@@ -17,7 +17,6 @@ import starling.text.TextField;
 import starling.utils.HAlign;
 import starling.utils.VAlign;
 
-import flash.geom.Rectangle;
 
 class Root extends Sprite {
 
@@ -219,19 +218,21 @@ class Root extends Sprite {
                         }
 
                     Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
-                        var bounds1 = dart.bounds;
-                        var bounds2 = paddle.bounds;
-                        var bounds3 = target.bounds;
-                        if(bounds1.intersects(bounds2)){
-                            removeChild(dart);
-                        }
-                        else if(bounds1.intersects(bounds3)){
-                            gameover = new Image(Root.assets.getTexture("gameover"));
-                            gameover.x = 0;
-                            gameover.y = 0;
-                            addChild(gameover);
-                            removeChild(dart);
-                        }
+                    	if (dart != null){
+	                        var bounds1 = dart.bounds;
+	                        var bounds2 = paddle.bounds;
+	                        var bounds3 = target.bounds;
+	                        if(bounds1.intersects(bounds2)){
+	                            removeChild(dart);
+	                        }
+	                        else if(bounds1.intersects(bounds3)){
+	                            gameover = new Image(Root.assets.getTexture("gameover"));
+	                            gameover.x = 0;
+	                            gameover.y = 0;
+	                            addChild(gameover);
+	                            removeChild(dart);
+	                        }
+	                    }
                     }); 
 
                         });                     
