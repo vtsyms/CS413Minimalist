@@ -2,6 +2,7 @@ import starling.display.Sprite;
 import starling.utils.AssetManager;
 
 import starling.display.Image;
+
 import starling.display.DisplayObject;
 import starling.core.Starling;
 import starling.animation.Transitions;
@@ -16,15 +17,16 @@ import starling.text.TextField;
 import starling.utils.HAlign;
 import starling.utils.VAlign;
 
+import flash.geom.Rectangle;
+
 class Root extends Sprite {
 
     public static var assets:AssetManager;
     public var background:Image;
-    public var ninja:Image;
-    public var Circle_placeholder:Image;
-    public var Paddle:Image;
+    public var paddle:Image;
     public var dart:Image;
     public var target:Image;
+    public var gameover:Image;
     public var startTime:Float; //used for scoring system
     public var currentTime:Float; //stores current time
     public var previousTime:Float; //used for dart creation
@@ -95,12 +97,11 @@ class Root extends Sprite {
     public function start(startup:Startup) {
 
         assets = new AssetManager();
-        assets.enqueue("assets/Background.png");
-        assets.enqueue("assets/ninja.png");
-        assets.enqueue("assets/Circle_placeholder.png");
-        assets.enqueue("assets/Paddle.png");
+        assets.enqueue("assets/background.png");
+        assets.enqueue("assets/paddle.png");
         assets.enqueue("assets/dart.png");
         assets.enqueue("assets/target.png");
+        assets.enqueue("assets/gameover.png");
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
@@ -111,32 +112,23 @@ class Root extends Sprite {
                         alpha: 0,
                         onComplete: function() {
                         startup.removeChild(startup.loadingBitmap);
-                        // ninja = new Image(Root.assets.getTexture("ninja"));
-                        // ninja.x = 100;
-                        // ninja.y = 0;
-                        // addChild(ninja);
 
-                        background = new Image(Root.assets.getTexture("Background"));
+                        background = new Image(Root.assets.getTexture("background"));
                         background.x = 0;
                         background.y = 0;
                         addChild(background);
-
-                        Circle_placeholder = new Image(Root.assets.getTexture("Circle_placeholder"));
-                        Circle_placeholder.x = 250;
-                        Circle_placeholder.y = 250;
-                        addChild(Circle_placeholder);
 
                         target = new Image(Root.assets.getTexture("target"));
                         target.x = 275;
                         target.y = 275;
                         addChild(target);
 
-                        Paddle = new Image(Root.assets.getTexture("Paddle"));
-                        Paddle.alignPivot();
-                        Paddle.rotation = deg2rad(-90);
-                        Paddle.x = 325 - 70*Math.cos(paddleAngle);
-                        Paddle.y = 325 - 70*Math.sin(paddleAngle);
-                        addChild(Paddle);
+                        paddle = new Image(Root.assets.getTexture("paddle"));
+                        paddle.alignPivot();
+                        paddle.rotation = deg2rad(-90);
+                        paddle.x = 325 - 70*Math.cos(paddleAngle);
+                        paddle.y = 325 - 70*Math.sin(paddleAngle);
+                        addChild(paddle);
 
                         scoreField = new TextField(100, 100, "Score: 0");
                         scoreField.hAlign = HAlign.LEFT;
@@ -147,11 +139,11 @@ class Root extends Sprite {
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
                                 if (event.keyCode == Keyboard.LEFT) {
-                                	paddleAngle -= 0.0174*moveSpeed;                             
-                                	paddleX =325 - 70*Math.cos(paddleAngle);
-                                	paddleY =325 - 70*Math.sin(paddleAngle);                                	
-                                    var position = Paddle.rotation - deg2rad(moveSpeed);
-                                    Starling.juggler.tween(Paddle, 0.06, {
+                                    paddleAngle -= 0.0174*moveSpeed;                             
+                                    paddleX =325 - 70*Math.cos(paddleAngle);
+                                    paddleY =325 - 70*Math.sin(paddleAngle);                                    
+                                    var position = paddle.rotation - deg2rad(moveSpeed);
+                                    Starling.juggler.tween(paddle, 0.06, {
                                         transition: Transitions.LINEAR,
                                         rotation: position,
                                         x: paddleX,
@@ -159,68 +151,32 @@ class Root extends Sprite {
                                         });
                                 }
                                 if (event.keyCode == Keyboard.RIGHT) {
-                                	paddleAngle += 0.0174*moveSpeed;
-                                	paddleX =325 - 70*Math.cos(paddleAngle);
-                                	paddleY = 325 - 70*Math.sin(paddleAngle);
-                                    var position = Paddle.rotation + deg2rad(moveSpeed);
-                                    Starling.juggler.tween(Paddle, 0.06, {
+                                    paddleAngle += 0.0174*moveSpeed;
+                                    paddleX =325 - 70*Math.cos(paddleAngle);
+                                    paddleY = 325 - 70*Math.sin(paddleAngle);
+                                    var position = paddle.rotation + deg2rad(moveSpeed);
+                                    Starling.juggler.tween(paddle, 0.06, {
                                         transition: Transitions.LINEAR,
                                         rotation: position,
                                         x: paddleX,
                                         y: paddleY
                                         });
                                 }
-                                // if (event.keyCode == Keyboard.LEFT) {
-                                //     var position = Paddle.x - 1;
-                                //     Starling.juggler.tween(Paddle, 0.06, {
-                                //         transition: Transitions.LINEAR,
-                                //         x: position
-                                //         });   
-                                // }  
-                                // if (event.keyCode == Keyboard.RIGHT) {
-                                //     var position = Paddle.x + 1;
-                                //     Starling.juggler.tween(Paddle, 0.06, {
-                                //         transition: Transitions.LINEAR,
-                                //         x: position
-                                //         });  
-                                // }
-                                // if (event.keyCode == Keyboard.DOWN) {
-                                //     var position = Paddle.y + 1;
-                                //     Starling.juggler.tween(Paddle, 0.06, {
-                                //         transition: Transitions.LINEAR,
-                                //         y: position
-                                //         });    
-                                // }
-                                // if (event.keyCode == Keyboard.UP) {
-                                //     var position = Paddle.y - 1;
-                                //     Starling.juggler.tween(Paddle, 0.06, {
-                                //         transition: Transitions.LINEAR,
-                                //         y: position
-                                //         });  
-                                // }
-                                // trace(Paddle.x);
-                                // trace(Paddle.y);
+
                             }
 
-                        // ninja.addEventListener(TouchEvent.TOUCH,
-                        //     function(e:TouchEvent) {
-                        //         var touch = e.getTouch(stage, TouchPhase.BEGAN);
-                        //         if (touch == null) return;
-                        //         });
-
-                        // Starling.juggler.tween(ninja, 1.0, {
-                        //     transition: Transitions.EASE_OUT_BOUNCE,
-                        //         delay: 2.0,
-                        //         y: 250
-                        //         });
-
                         );
-					startTime = timer.stamp();
+
+                    startTime = timer.stamp();
+
                     Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
+                    
                         currentTime = timer.stamp();
                         var score = Std.int((currentTime-startTime)*100);
                         scoreField.text = "Score: " + score;
-                        if(currentTime-previousTime > 2){  //if enough time has passed between darts, will spawn a new dart
+
+                        if(currentTime-previousTime >= 3){  //if enough time has passed between darts, will spawn a new dart
+
                             dart = new Image(Root.assets.getTexture("dart"));
                             var startingWall = Math.random(); //determines if which wall the dart shows up at
                             if(startingWall < .25){  //spawns dart on left wall
@@ -250,14 +206,45 @@ class Root extends Sprite {
                                 y: 325,
                                 x: 325
                             });
-
+                           
                         }
-                        });
-                    }
+
+                        else if(currentTime-previousTime < 3){
+                        
+                        }
+
+                        else{
+                            removeChild(dart);
+                            dart.removeEventListeners(Event.ENTER_FRAME);
+                        }
+
+                    Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
+                        var bounds1 = dart.bounds;
+                        var bounds2 = paddle.bounds;
+                        var bounds3 = target.bounds;
+                        if(bounds1.intersects(bounds2)){
+                            removeChild(dart);
+                        }
+                        else if(bounds1.intersects(bounds3)){
+                            gameover = new Image(Root.assets.getTexture("gameover"));
+                            gameover.x = 0;
+                            gameover.y = 0;
+                            addChild(gameover);
+                            removeChild(dart);
+                        }
+                    }); 
+
+                        });                     
+
+                }
+
                 });
+
             }
 
         });
-    }
+    } 
+
+           
 
 }
