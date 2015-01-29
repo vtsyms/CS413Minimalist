@@ -31,7 +31,9 @@ class Root extends Sprite {
     public var timer = haxe.Timer;
     public var scoreField:TextField; 
     public var paddleAngle:Float = 0;
-    public var moveSpeed:Int = 4;
+    public var moveSpeed:Int = 20;
+    public var paddleX:Float;
+    public var paddleY:Float;
     public function new() {
         super();
     }
@@ -96,7 +98,7 @@ class Root extends Sprite {
         assets.enqueue("assets/Background.png");
         assets.enqueue("assets/ninja.png");
         assets.enqueue("assets/Circle_placeholder.png");
-        assets.enqueue("assets/paddle2.png");
+        assets.enqueue("assets/Paddle.png");
         assets.enqueue("assets/dart.png");
         assets.enqueue("assets/target.png");
         assets.loadQueue(function onProgress(ratio:Float) {
@@ -129,11 +131,11 @@ class Root extends Sprite {
                         target.y = 275;
                         addChild(target);
 
-                        Paddle = new Image(Root.assets.getTexture("paddle2"));
+                        Paddle = new Image(Root.assets.getTexture("Paddle"));
                         Paddle.alignPivot();
-                        Paddle.rotation = deg2rad(0);
-                        Paddle.x = 325;
-                        Paddle.y = 255;
+                        Paddle.rotation = deg2rad(-90);
+                        Paddle.x = 325 - 70*Math.cos(paddleAngle);
+                        Paddle.y = 325 - 70*Math.sin(paddleAngle);
                         addChild(Paddle);
 
                         scoreField = new TextField(100, 100, "Score: 0");
@@ -144,28 +146,28 @@ class Root extends Sprite {
                         previousTime = timer.stamp();
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
-                                if (event.keyCode == Keyboard.LEFT) {                             
-                                	Paddle.x =325 - 70*Math.cos(paddleAngle);
-                                	Paddle.y =325 - 70*Math.sin(paddleAngle);
-                                	paddleAngle -= 0.0174*moveSpeed;
+                                if (event.keyCode == Keyboard.LEFT) {
+                                	paddleAngle -= 0.0174*moveSpeed;                             
+                                	paddleX =325 - 70*Math.cos(paddleAngle);
+                                	paddleY =325 - 70*Math.sin(paddleAngle);                                	
                                     var position = Paddle.rotation - deg2rad(moveSpeed);
-                                    Starling.juggler.tween(Paddle, 0, {
+                                    Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
                                         rotation: position,
-                                        x: Paddle.x,
-                                        y: Paddle.y
+                                        x: paddleX,
+                                        y: paddleY
                                         });
                                 }
                                 if (event.keyCode == Keyboard.RIGHT) {
                                 	paddleAngle += 0.0174*moveSpeed;
-                                	Paddle.x =325 - 70*Math.cos(paddleAngle);
-                                	Paddle.y = 325 - 70*Math.sin(paddleAngle);
+                                	paddleX =325 - 70*Math.cos(paddleAngle);
+                                	paddleY = 325 - 70*Math.sin(paddleAngle);
                                     var position = Paddle.rotation + deg2rad(moveSpeed);
-                                    Starling.juggler.tween(Paddle, 0, {
+                                    Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
                                         rotation: position,
-                                        x: Paddle.x,
-                                        y: Paddle.y
+                                        x: paddleX,
+                                        y: paddleY
                                         });
                                 }
                                 // if (event.keyCode == Keyboard.LEFT) {
