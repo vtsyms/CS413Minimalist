@@ -30,7 +30,10 @@ class Root extends Sprite {
     public var previousTime:Float; //used for dart creation
     public var timer = haxe.Timer;
     public var scoreField:TextField; 
-
+    public var paddleAngle:Float = 0;
+    public var moveSpeed:Int = 20;
+    public var paddleX:Float;
+    public var paddleY:Float;
     public function new() {
         super();
     }
@@ -130,9 +133,9 @@ class Root extends Sprite {
 
                         Paddle = new Image(Root.assets.getTexture("Paddle"));
                         Paddle.alignPivot();
-                        Paddle.rotation = deg2rad(0);
-                        Paddle.x = 325;
-                        Paddle.y = 325;
+                        Paddle.rotation = deg2rad(-90);
+                        Paddle.x = 325 - 70*Math.cos(paddleAngle);
+                        Paddle.y = 325 - 70*Math.sin(paddleAngle);
                         addChild(Paddle);
 
                         scoreField = new TextField(100, 100, "Score: 0");
@@ -144,17 +147,27 @@ class Root extends Sprite {
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
                                 if (event.keyCode == Keyboard.LEFT) {
-                                    var position = Paddle.rotation - deg2rad(20);
+                                	paddleAngle -= 0.0174*moveSpeed;                             
+                                	paddleX =325 - 70*Math.cos(paddleAngle);
+                                	paddleY =325 - 70*Math.sin(paddleAngle);                                	
+                                    var position = Paddle.rotation - deg2rad(moveSpeed);
                                     Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
-                                        rotation: position
+                                        rotation: position,
+                                        x: paddleX,
+                                        y: paddleY
                                         });
                                 }
                                 if (event.keyCode == Keyboard.RIGHT) {
-                                    var position = Paddle.rotation + deg2rad(20);
+                                	paddleAngle += 0.0174*moveSpeed;
+                                	paddleX =325 - 70*Math.cos(paddleAngle);
+                                	paddleY = 325 - 70*Math.sin(paddleAngle);
+                                    var position = Paddle.rotation + deg2rad(moveSpeed);
                                     Starling.juggler.tween(Paddle, 0.06, {
                                         transition: Transitions.LINEAR,
-                                        rotation: position
+                                        rotation: position,
+                                        x: paddleX,
+                                        y: paddleY
                                         });
                                 }
                                 // if (event.keyCode == Keyboard.LEFT) {
