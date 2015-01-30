@@ -36,7 +36,6 @@ class Root extends Sprite {
     public var moveSpeed:Int = 20;
     public var paddleX:Float;
     public var paddleY:Float;
-    public var butt:Image;
     public function new() {
         super();
     }
@@ -104,7 +103,6 @@ class Root extends Sprite {
         assets.enqueue("assets/target.png");
         assets.enqueue("assets/gameover.png");
         assets.enqueue("assets/middle.png");
-        assets.enqueue("assets/ready.png");
         assets.loadQueue(function onProgress(ratio:Float) {
 
             if (ratio == 1) {
@@ -130,25 +128,6 @@ class Root extends Sprite {
                         middle.x = 325;
                         middle.y = 325;
                         addChild(middle);
-
-
-                         butt = new Image(Root.assets.getTexture("ready"));
-                        butt.x = 130;
-                        butt.y = 220;
-                        addChild(butt);
-
-                        // The button listner is looking for the READY? button to be pressed. Once pressed it deletes
-                        // itself and then runs the rest of the games code.
-                        butt.addEventListener(TouchEvent.TOUCH,
-                                function(e:TouchEvent){
-                                    
-                                    var touch = e.getTouch(stage, TouchPhase.BEGAN);
-                                    // checkis if the button hovered over or if it was clicked.
-                                    if (touch == null) return;
-                                    //trace("Game Start");
-                                    // removes the button from the screen.
-                                    removeChild(butt);
-
 
                         paddle = new Image(Root.assets.getTexture("paddle"));
                         paddle.alignPivot();
@@ -259,9 +238,7 @@ class Root extends Sprite {
 	                    }
                     }); 
 
-                        }); 
-
-             }); // ending to the start game Event listener.                    
+                        });                     
 
                 }
 
