@@ -37,6 +37,7 @@ class Root extends Sprite {
     public var paddleX:Float;
     public var paddleY:Float;
     public var butt:Image;
+    public var ran = Math.random();
     public function new() {
         super();
     }
@@ -100,7 +101,9 @@ class Root extends Sprite {
         assets = new AssetManager();
         assets.enqueue("assets/background.png");
         assets.enqueue("assets/paddle.png");
-        assets.enqueue("assets/dart.png");
+        assets.enqueue("assets/dart1.png");
+        assets.enqueue("assets/dart2.png");
+        assets.enqueue("assets/dart3.png");
         assets.enqueue("assets/target.png");
         assets.enqueue("assets/gameover.png");
         assets.enqueue("assets/middle.png");
@@ -131,10 +134,10 @@ class Root extends Sprite {
                         middle.y = 325;
                         addChild(middle);
 
-
+                        //trace(ran);
                          butt = new Image(Root.assets.getTexture("ready"));
-                        butt.x = 130;
-                        butt.y = 220;
+                        butt.x = -25;
+                        butt.y = -90;
                         addChild(butt);
 
                         // The button listner is looking for the READY? button to be pressed. Once pressed it deletes
@@ -204,7 +207,17 @@ class Root extends Sprite {
 
                         if(currentTime-previousTime >= 3){  //if enough time has passed between darts, will spawn a new dart
 
-                            dart = new Image(Root.assets.getTexture("dart"));
+                            ran = Math.random();
+                            ran = ran*10;
+
+                            //trace(ran);
+                            // This section randomly assigns an image to dart
+                            // this allows for a variety of darts to fly at the player
+                            if ( ran < 4)                         dart = new Image(Root.assets.getTexture("dart1"));
+                            else if (ran > 3 && ran < 7)          dart = new Image(Root.assets.getTexture("dart2"));
+                            else if ( ran > 6)                    dart = new Image(Root.assets.getTexture("dart3"));
+                            //dart = new Image(Root.asset.getTexture("dart"));
+                            
                             var startingWall = Math.random(); //determines if which wall the dart shows up at
                             if(startingWall < .25){  //spawns dart on left wall
                                 dart.x = 0;
