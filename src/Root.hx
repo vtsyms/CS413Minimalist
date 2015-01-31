@@ -169,11 +169,11 @@ class Root extends Sprite {
                         Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN,
                             function(event:KeyboardEvent) {
                                 if (event.keyCode == Keyboard.LEFT) {
-                                    paddleAngle -= 0.0174*moveSpeed;                             
+                                    paddleAngle -= deg2rad(1)*moveSpeed;                             
                                     paddleX =325 - 70*Math.cos(paddleAngle);
                                     paddleY =325 - 70*Math.sin(paddleAngle);                                    
                                     var position = paddle.rotation - deg2rad(moveSpeed);
-                                    Starling.juggler.tween(paddle, 0.06, {
+                                    Starling.juggler.tween(paddle, 0.00, {
                                         transition: Transitions.LINEAR,
                                         rotation: position,
                                         x: paddleX,
@@ -181,11 +181,11 @@ class Root extends Sprite {
                                         });
                                 }
                                 if (event.keyCode == Keyboard.RIGHT) {
-                                    paddleAngle += 0.0174*moveSpeed;
+                                    paddleAngle += deg2rad(1)*moveSpeed;
                                     paddleX =325 - 70*Math.cos(paddleAngle);
                                     paddleY = 325 - 70*Math.sin(paddleAngle);
                                     var position = paddle.rotation + deg2rad(moveSpeed);
-                                    Starling.juggler.tween(paddle, 0.06, {
+                                    Starling.juggler.tween(paddle, 0.00, {
                                         transition: Transitions.LINEAR,
                                         rotation: position,
                                         x: paddleX,
