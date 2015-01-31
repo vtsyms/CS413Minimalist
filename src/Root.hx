@@ -46,6 +46,33 @@ class Root extends Sprite {
         return deg / 180.0 * Math.PI;
     }
 
+    public function endgame()
+    {
+
+                            Starling.current.stage.addEventListener(Event.ENTER_FRAME, function(event:Event){
+                        if (dart != null){
+                            var bounds1 = dart.bounds;
+                            var bounds2 = paddle.bounds;
+                            var bounds3 = middle.bounds;
+                            if(bounds1.intersects(bounds2)){
+                                removeChild(dart);
+                            }
+                            else if(bounds1.intersects(bounds3)) {
+                                //trace("Bounds1" + bounds1);
+                                gameover = new Image(Root.assets.getTexture("gameover"));
+                                gameover.x = 0;
+                                gameover.y = 0;
+                                removeChildren();
+                                addChild(gameover);
+                                addChild(scoreField);
+                                Starling.current.stage.removeEventListeners(Event.ENTER_FRAME);
+                                Starling.current.stage.removeEventListeners(KeyboardEvent.KEY_DOWN);
+                            }
+                        }
+                    }); 
+
+    }
+
     public function findAng(posx:Float, posy:Float){
         if (posy == 0 && posx != 0) {
             if (posx > 325){
@@ -130,8 +157,8 @@ class Root extends Sprite {
                         addChild(target);
 
                         middle = new Image(Root.assets.getTexture("middle"));
-                        middle.x = 325;
-                        middle.y = 325;
+                        middle.x = 324;
+                        middle.y = 324;
                         addChild(middle);
 
                         //trace(ran);
@@ -259,15 +286,8 @@ class Root extends Sprite {
 	                        if(bounds1.intersects(bounds2)){
 	                            removeChild(dart);
 	                        }
-	                        else if(bounds1.intersects(bounds3)){
-	                            gameover = new Image(Root.assets.getTexture("gameover"));
-	                            gameover.x = 0;
-	                            gameover.y = 0;
-	                            removeChildren();
-	                            addChild(gameover);
-	                            addChild(scoreField);
-	                            Starling.current.stage.removeEventListeners(Event.ENTER_FRAME);
-	                            Starling.current.stage.removeEventListeners(KeyboardEvent.KEY_DOWN);
+	                        else if(bounds1.intersects(bounds3)) {
+                                Starling.juggler.delayCall(endgame,.2);
 	                        }
 	                    }
                     }); 
